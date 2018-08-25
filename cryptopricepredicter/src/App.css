@@ -1,28 +1,66 @@
 .App {
-  text-align: center;
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+  grid-template-rows: auto 4fr 2fr;
+  grid-template-areas:
+    "navbar navbar navbar navbar"
+    "sidebar main main footer"
+    "sidebar main main footer"
+    "sidebar main main footer"
+    ;
+  width: 100%;
+  height: 100%;
+  position: absolute;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+.Navbar {
+  grid-area: navbar;
+  background-color: blue;
 }
 
-.App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
+.Sidebar {
+  grid-area: sidebar;
+  background-color: red;
 }
 
-.App-title {
-  font-size: 1.5em;
+.Main-Content {
+  grid-area: main;
+  background-color: grey;
 }
 
-.App-intro {
-  font-size: large;
+.Footer {
+  grid-area: footer;
+  background-color: purple;
 }
 
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+@media screen and (max-width: 85em) {
+  .App {
+    grid-template-columns: 1fr 3fr;
+    grid-template-rows: auto 1fr 3fr;
+    grid-template-areas:
+    "navbar navbar navbar"
+    "sidebar main main"
+    "sidebar main main"
+    "footer footer footer"
+    ;
+  }
+}
+
+@media screen and (max-width: 60em) {
+
+  .App {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto 1fr 1fr;
+    grid-template-areas:
+      "navbar navbar"
+      "main main"
+      "main main"
+      "footer footer"
+      ;
+  }
+
+  .Sidebar {
+    display: none;
+  }
+
 }
