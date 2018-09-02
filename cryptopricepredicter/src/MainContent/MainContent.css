@@ -1,0 +1,8 @@
+.Main-Content {
+  background-color: #333;
+}
+
+.Main-Content__draw-area {
+  width: 100%;
+  height: 100%;
+}

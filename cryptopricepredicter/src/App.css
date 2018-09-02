@@ -15,25 +15,21 @@
 
 .Navbar {
   grid-area: navbar;
-  background-color: blue;
 }
 
 .Sidebar {
   grid-area: sidebar;
-  background-color: red;
 }
 
 .Main-Content {
   grid-area: main;
-  background-color: grey;
 }
 
 .Footer {
   grid-area: footer;
-  background-color: purple;
 }
 
-@media screen and (max-width: 85em) {
+@media screen and (max-width: 95em) {
   .App {
     grid-template-columns: 1fr 3fr;
     grid-template-rows: auto 1fr 3fr;
@@ -46,7 +42,7 @@
   }
 }
 
-@media screen and (max-width: 60em) {
+@media screen and (max-width: 40em) {
 
   .App {
     grid-template-columns: 1fr 1fr;
