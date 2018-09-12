@@ -14,17 +14,24 @@ class MainContent extends Component {
     this.xLength = 200;
     this.canvasHeight = 1200;
     this.maxChartPrice = 20000;
+    this.priceGraphContext = undefined;
   }
 
   componentDidMount() {
     this.drawPrice()
+
+    $('.Main-Content__price-chart').mousedown(this.mousedown.bind(this))
+    $('.Main-Content__price-chart').mouseup(this.mouseup.bind(this))
+    $('.Main-Content__price-chart').mousemove(this.mousemove.bind(this))
   }
 
   drawPrice() {
     var priceCanvas = $('.Main-Content__price-chart')
     var priceContext = priceCanvas[0].getContext('2d')
+    this.priceGraphContext = priceContext;
 
     var startingPoint = this.convertPricePointToCanvasPoint(this.augmentedPriceData[0]);
+    priceContext.beginPath();
     priceContext.moveTo(0, startingPoint);
 
     for (var i = 1; i <= this.augmentedPriceData.length; i++) {
@@ -37,8 +44,39 @@ class MainContent extends Component {
     priceContext.stroke();
   }
 
+  redrawPrice() {
+    this.clearDrawing();
+    this.drawPrice();
+  }
+
+  clearDrawing() {
+    this.priceGraphContext.clearRect(0, 0, 2000, 1200);
+  }
+
   convertPricePointToCanvasPoint(price) {
     return this.canvasHeight - price / (this.maxChartPrice/this.canvasHeight);
+  }
+
+  // Event handlers
+
+  mousedown(e) {
+    this.previousPageY = e.pageY;
+  }
+
+  mouseup() {
+    this.changingPrice = false;
+    this.previousPageY = undefined;
+  }
+
+  mousemove(e) {
+    if (!this.previousPageY) {
+      return
+    }
+    this.pageY = e.pageY;
+    this.maxChartPrice -= (this.pageY - this.previousPageY) * 100;
+
+    this.redrawPrice();
+    this.previousPageY = this.pageY;
   }
 
   render () {
