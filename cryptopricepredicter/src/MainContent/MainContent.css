@@ -3,6 +3,15 @@
 }
 
 .Main-Content__price-chart {
-  width: 100%;
+  display: inline-block;
+  width: 90%;
   height: 100%;
+}
+
+.Main-Content__side-price {
+  display: inline-block;
+  vertical-align: top;
+  width: 10%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.1);
 }

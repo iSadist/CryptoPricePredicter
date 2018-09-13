@@ -13,8 +13,11 @@ class MainContent extends Component {
     ]
     this.xLength = 200;
     this.canvasHeight = 1200;
-    this.maxChartPrice = 20000;
     this.priceGraphContext = undefined;
+
+    this.state = {
+      maxChartPrice: 20000
+    }
   }
 
   componentDidMount() {
@@ -54,7 +57,7 @@ class MainContent extends Component {
   }
 
   convertPricePointToCanvasPoint(price) {
-    return this.canvasHeight - price / (this.maxChartPrice/this.canvasHeight);
+    return this.canvasHeight - price / (this.state.maxChartPrice/this.canvasHeight);
   }
 
   // Event handlers
@@ -73,7 +76,11 @@ class MainContent extends Component {
       return
     }
     this.pageY = e.pageY;
-    this.maxChartPrice -= (this.pageY - this.previousPageY) * 100;
+    var newMaxPrice = this.state.maxChartPrice - (this.pageY - this.previousPageY) * 100;
+
+    this.setState({
+      maxChartPrice: newMaxPrice
+    })
 
     this.redrawPrice();
     this.previousPageY = this.pageY;
@@ -83,6 +90,9 @@ class MainContent extends Component {
     return (
       <div className="Main-Content">
         <canvas className='Main-Content__price-chart' width="2000" height="1200"></canvas>
+        <div className="Main-Content__side-price">
+          -{this.state.maxChartPrice}
+        </div>
       </div>
     );
   }
