@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './MainContent.css';
+import PriceBubble from './PriceBubble.js';
 import $ from 'jquery';
 
 class MainContent extends Component {
@@ -15,17 +16,25 @@ class MainContent extends Component {
     this.canvasWidth = 2000;
     this.canvasHeight = 1200;
     this.priceGraphContext = undefined;
+    this.startingMaxPrice = 20000;
+    this.numberOfPriceLines = 5;
+    this.priceLines = [];
+
+    var tempPrice = this.startingMaxPrice;
+
+    for (var i = 0; i < this.numberOfPriceLines; i++) {
+      this.priceLines.push(tempPrice);
+      tempPrice -= this.startingMaxPrice / this.numberOfPriceLines;
+    }
 
     this.state = {
-      maxChartPrice: 20000
+      currentMaxChartPrice: this.startingMaxPrice
     };
   }
 
   componentDidMount() {
     this.priceCanvas = $('.Main-Content__price-chart');
-
     this.drawPrice();
-    this.drawPriceGrid();
 
     this.priceCanvas.mousedown(this.mousedown.bind(this));
     this.priceCanvas.mouseup(this.mouseup.bind(this));
@@ -49,21 +58,15 @@ class MainContent extends Component {
     priceContext.lineWidth = 5;
     priceContext.strokeStyle = '#ff0000';
     priceContext.stroke();
+
+    for (var j = 0; j < this.priceLines.length; j++) {
+      this.drawPriceLine(this.priceLines[j]);
+    }
   }
 
   redrawPrice() {
     this.clearDrawing();
     this.drawPrice();
-    this.drawPriceGrid();
-
-    $(".side-price__price-bubble").css('top', this.convertPricePointToCanvasPoint(20000) * (this.priceCanvas.height() / this.canvasHeight));
-  }
-
-  drawPriceGrid() {
-    this.priceGraphContext.beginPath();
-    this.drawPriceLine(this.state.maxChartPrice/2);
-    this.drawPriceLine(this.state.maxChartPrice/5);
-    this.drawPriceLine(this.state.maxChartPrice/1.2);
   }
 
   drawPriceLine(price) {
@@ -92,7 +95,7 @@ class MainContent extends Component {
   }
 
   convertPricePointToCanvasPoint(price) {
-    return this.canvasHeight - price / (this.state.maxChartPrice/this.canvasHeight);
+    return this.canvasHeight - price / (this.state.currentMaxChartPrice/this.canvasHeight);
   }
 
   // Event handlers
@@ -125,10 +128,10 @@ class MainContent extends Component {
 
   adjustmaxPrice(e) {
     this.pageY = e.pageY;
-    var newMaxPrice = this.state.maxChartPrice - (this.pageY - this.previousPageY) * 100;
+    var newMaxPrice = this.state.currentMaxChartPrice - (this.pageY - this.previousPageY) * 100;
 
     this.setState({
-      maxChartPrice: newMaxPrice
+      currentMaxChartPrice: newMaxPrice
     });
     this.previousPageY = this.pageY;
   }
@@ -138,9 +141,12 @@ class MainContent extends Component {
       <div className="Main-Content">
         <canvas className='Main-Content__price-chart' width="2000" height="1200"></canvas>
         <div className="Main-Content__side-price">
-          <div className="side-price__price-bubble">
-            20000
-          </div>
+
+          {
+            this.priceLines.map(function(value, index) {
+              return <PriceBubble PriceBubble price={value} maxPrice={this.state.currentMaxChartPrice} canvasHeight={this.canvasHeight} height={1300} number={index+1} />
+            }.bind(this))
+          }
         </div>
       </div>
     );
