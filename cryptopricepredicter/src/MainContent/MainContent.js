@@ -53,6 +53,7 @@ class MainContent extends Component {
     this.clearDrawing();
     this.drawPrice();
     this.drawPriceGrid();
+    $(".side-price__price-bubble").css('top', this.convertPricePointToCanvasPoint(20000))
   }
 
   drawPriceGrid() {
@@ -111,7 +112,9 @@ class MainContent extends Component {
       <div className="Main-Content">
         <canvas className='Main-Content__price-chart' width="2000" height="1200"></canvas>
         <div className="Main-Content__side-price">
-          -{this.state.maxChartPrice}
+          <div className="side-price__price-bubble">
+            20000
+          </div>
         </div>
       </div>
     );
