@@ -9,9 +9,9 @@ class MainContent extends Component {
 
     // Declare class variables
     this.augmentedPriceData = [
-      5413, 5899, 5220, 5650, 5615, 5802, 6200, 8500, 10000, 20000
+      5413, 5899, 5220, 5650, 5615, 5802, 6200, 8500, 7543, 4350, 5413, 5899, 5220, 5650, 5615, 5802, 6200, 8500, 10000, 20000
     ];
-    this.xLength = 200;
+    this.xLength = 100;
     this.canvasWidth = 2000;
     this.canvasHeight = 1200;
     this.priceGraphContext = undefined;
@@ -22,17 +22,19 @@ class MainContent extends Component {
   }
 
   componentDidMount() {
+    this.priceCanvas = $('.Main-Content__price-chart');
+
     this.drawPrice();
     this.drawPriceGrid();
 
-    $('.Main-Content__price-chart').mousedown(this.mousedown.bind(this));
-    $('.Main-Content__price-chart').mouseup(this.mouseup.bind(this));
-    $('.Main-Content__price-chart').mousemove(this.mousemove.bind(this));
+    this.priceCanvas.mousedown(this.mousedown.bind(this));
+    this.priceCanvas.mouseup(this.mouseup.bind(this));
+    this.priceCanvas.mousemove(this.mousemove.bind(this));
+    this.priceCanvas.mouseleave(this.mouseleave.bind(this));
   }
 
   drawPrice() {
-    var priceCanvas = $('.Main-Content__price-chart');
-    var priceContext = priceCanvas[0].getContext('2d');
+    var priceContext = this.priceCanvas[0].getContext('2d');
     this.priceGraphContext = priceContext;
 
     var startingPoint = this.convertPricePointToCanvasPoint(this.augmentedPriceData[0]);
@@ -53,7 +55,8 @@ class MainContent extends Component {
     this.clearDrawing();
     this.drawPrice();
     this.drawPriceGrid();
-    $(".side-price__price-bubble").css('top', this.convertPricePointToCanvasPoint(20000))
+
+    $(".side-price__price-bubble").css('top', this.convertPricePointToCanvasPoint(20000) * (this.priceCanvas.height() / this.canvasHeight));
   }
 
   drawPriceGrid() {
@@ -68,6 +71,17 @@ class MainContent extends Component {
     var pricePoint = this.convertPricePointToCanvasPoint(price);
     this.priceGraphContext.moveTo(0, pricePoint);
     this.priceGraphContext.lineTo(this.canvasWidth, pricePoint);
+    this.priceGraphContext.lineWidth = 1;
+    this.priceGraphContext.strokeStyle = '#fff';
+    this.priceGraphContext.stroke();
+  }
+
+  drawCross(x, y) {
+    this.priceGraphContext.beginPath();
+    this.priceGraphContext.moveTo(0, y);
+    this.priceGraphContext.lineTo(this.canvasWidth, y);
+    this.priceGraphContext.moveTo(x, 0);
+    this.priceGraphContext.lineTo(x, this.canvasHeight);
     this.priceGraphContext.lineWidth = 1;
     this.priceGraphContext.strokeStyle = '#fff';
     this.priceGraphContext.stroke();
@@ -93,17 +107,29 @@ class MainContent extends Component {
   }
 
   mousemove(e) {
-    if (!this.previousPageY) {
-      return;
+    if (this.previousPageY) {
+      this.adjustmaxPrice(e);
     }
+
+    var boundingRect = this.priceCanvas[0].getBoundingClientRect();
+    var x = (e.clientX - boundingRect.left) * (this.canvasWidth/boundingRect.width);
+    var y = (e.clientY - boundingRect.top) * (this.canvasHeight/boundingRect.height);
+
+    this.redrawPrice();
+    this.drawCross(x, y);
+  }
+
+  mouseleave(e) {
+    this.redrawPrice();
+  }
+
+  adjustmaxPrice(e) {
     this.pageY = e.pageY;
     var newMaxPrice = this.state.maxChartPrice - (this.pageY - this.previousPageY) * 100;
 
     this.setState({
       maxChartPrice: newMaxPrice
     });
-
-    this.redrawPrice();
     this.previousPageY = this.pageY;
   }
 
