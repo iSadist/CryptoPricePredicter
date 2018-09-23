@@ -5,15 +5,22 @@
 .Main-Content__price-chart {
   display: inline-block;
   width: 90%;
-  height: 100%;
+  height: 89%;
 }
 
 .Main-Content__side-price {
   display: inline-block;
   vertical-align: top;
   width: 10%;
-  height: 100%;
+  height: 90%;
   background-color: rgba(0, 0, 0, 0.1);
+}
+
+.Main-Content__timeframe {
+  background-color: rgba(0, 0, 0, 0.1);
+  height: 10%;
+  width: 100%;
+  display: inline-block;
 }
 
 .side-price__price-bubble {
@@ -24,4 +31,8 @@
   text-align: center;
   background-color: white;
   color: black;
+}
+
+.timeframe-item {
+  margin-right: 28px;
 }

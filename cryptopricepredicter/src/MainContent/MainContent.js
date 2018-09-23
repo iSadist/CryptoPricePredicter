@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './MainContent.css';
 import PriceBubble from './PriceBubble.js';
+import TimeframeItem from './TimeframeItem.js'
 import $ from 'jquery';
 
 class MainContent extends Component {
@@ -46,6 +47,7 @@ class MainContent extends Component {
     priceContext.beginPath();
     priceContext.moveTo(0, startingPoint);
 
+    // Draw price graph
     for (var i = 1; i <= this.augmentedPriceData.length; i++) {
       var canvasPoint = this.convertPricePointToCanvasPoint(this.augmentedPriceData[i-1]);
       priceContext.lineTo(i*(this.xLength), canvasPoint);
@@ -55,8 +57,14 @@ class MainContent extends Component {
     priceContext.strokeStyle = '#ff0000';
     priceContext.stroke();
 
+    // Draw Horizonatal lines
     for (var j = 0; j < this.priceLines.length; j++) {
       this.drawPriceLine(this.priceLines[j]);
+    }
+
+    // Draw Vertical lines
+    for (var k = 0; k < this.augmentedPriceData.length; k++) {
+      this.drawVerticalLine(k*(this.xLength));
     }
   }
 
@@ -70,6 +78,15 @@ class MainContent extends Component {
     var pricePoint = this.convertPricePointToCanvasPoint(price);
     this.priceGraphContext.moveTo(0, pricePoint);
     this.priceGraphContext.lineTo(this.canvasWidth, pricePoint);
+    this.priceGraphContext.lineWidth = 1;
+    this.priceGraphContext.strokeStyle = '#fff';
+    this.priceGraphContext.stroke();
+  }
+
+  drawVerticalLine(time) {
+    this.priceGraphContext.beginPath();
+    this.priceGraphContext.moveTo(time, 0);
+    this.priceGraphContext.lineTo(time, this.canvasHeight);
     this.priceGraphContext.lineWidth = 1;
     this.priceGraphContext.strokeStyle = '#fff';
     this.priceGraphContext.stroke();
@@ -136,11 +153,17 @@ class MainContent extends Component {
       <div className="Main-Content">
         <canvas className='Main-Content__price-chart' width="2000" height="1200"></canvas>
         <div className="Main-Content__side-price" onMouseDown={this.mousedown.bind(this)} onMouseUp={this.mouseup.bind(this)} onMouseMove={this.mousemove.bind(this)}>
-
           {
             this.priceLines.map(function(value, index) {
               return <PriceBubble PriceBubble price={value} maxPrice={this.state.currentMaxChartPrice} canvasHeight={this.canvasHeight} height={1300} number={index+1} />
             }.bind(this))
+          }
+        </div>
+        <div className="Main-Content__timeframe">
+          {
+            this.augmentedPriceData.map(function(value, index) {
+              return <TimeframeItem label={index}/>
+            })
           }
         </div>
       </div>
