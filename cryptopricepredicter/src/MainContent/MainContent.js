@@ -5,8 +5,8 @@ import $ from 'jquery';
 
 class MainContent extends Component {
 
-  constructor () {
-    super();
+  constructor (props) {
+    super(props);
 
     // Declare class variables
     this.augmentedPriceData = [
@@ -35,11 +35,7 @@ class MainContent extends Component {
   componentDidMount() {
     this.priceCanvas = $('.Main-Content__price-chart');
     this.drawPrice();
-
-    this.priceCanvas.mousedown(this.mousedown.bind(this));
-    this.priceCanvas.mouseup(this.mouseup.bind(this));
     this.priceCanvas.mousemove(this.mousemove.bind(this));
-    this.priceCanvas.mouseleave(this.mouseleave.bind(this));
   }
 
   drawPrice() {
@@ -105,7 +101,6 @@ class MainContent extends Component {
   }
 
   mouseup() {
-    this.changingPrice = false;
     this.previousPageY = undefined;
   }
 
@@ -140,7 +135,7 @@ class MainContent extends Component {
     return (
       <div className="Main-Content">
         <canvas className='Main-Content__price-chart' width="2000" height="1200"></canvas>
-        <div className="Main-Content__side-price">
+        <div className="Main-Content__side-price" onMouseDown={this.mousedown.bind(this)} onMouseUp={this.mouseup.bind(this)} onMouseMove={this.mousemove.bind(this)}>
 
           {
             this.priceLines.map(function(value, index) {
