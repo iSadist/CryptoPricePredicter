@@ -3,7 +3,7 @@ import Navbar from './Navbar/Navbar.js';
 import Footer from './Footer/Footer.js';
 import Sidebar from './Sidebar/Sidebar.js';
 import MainContent from './MainContent/MainContent.js';
-import './App.css';
+import './App.scss';
 
 class App extends Component {
   render() {

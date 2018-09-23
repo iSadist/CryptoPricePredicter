@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './MainContent.css';
+import './MainContent.scss';
 import PriceBubble from './PriceBubble.js';
 import TimeframeItem from './TimeframeItem.js'
 import $ from 'jquery';

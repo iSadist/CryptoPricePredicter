@@ -1,0 +1,38 @@
+.Main-Content {
+  background-color: #333;
+
+  &__price-chart {
+    display: inline-block;
+    width: 90%;
+    height: 89%;
+  }
+
+  &__side-price {
+    display: inline-block;
+    vertical-align: top;
+    width: 10%;
+    height: 90%;
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+
+  &__timeframe {
+    background-color: rgba(0, 0, 0, 0.1);
+    height: 10%;
+    width: 100%;
+    display: inline-block;
+  }
+}
+
+.side-price__price-bubble {
+  position: relative;
+  top: 0px;
+  padding: 2px;
+  border-radius: 50px 0px 0px 50px;
+  text-align: center;
+  background-color: white;
+  color: black;
+}
+
+.timeframe-item {
+  margin-right: 28px;
+}
