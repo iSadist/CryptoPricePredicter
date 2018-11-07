@@ -5,12 +5,14 @@ import SettingsView from './Settings/SettingsView.js';
 import MainContent from './MainContent/MainContent.js';
 import './App.scss';
 
+const { currencies } = require('./config.js')
+
 class App extends Component {
   render() {
     return (
       <div className="App">
         <Navbar/>
-        <SettingsView/>
+        <SettingsView currencies={currencies}/>
         <MainContent/>
         <Footer/>
       </div>

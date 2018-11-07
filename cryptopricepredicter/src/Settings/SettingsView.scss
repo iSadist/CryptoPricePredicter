@@ -2,4 +2,29 @@
   background-color: blue;
   color: white;
   padding: 10px;
+
+
+	&__name {
+		display: inline-block;
+	}
+
+	&__checkbox {
+		display: inline-block;
+	}
+
+  &__selected-currency {
+  	display: block;
+  }
+
+  &__moving-average {
+  	display: block;
+  }
+
+  &__volume {
+  	display: block;
+  }
+
+  &__add-button {
+  	float: right;
+  }
 }

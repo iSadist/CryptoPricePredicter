@@ -3,19 +3,34 @@ import './SettingsView.scss';
 
 class SettingsView extends Component {
 
-  constructor() {
-    super();
-    this.currencies = [];
+  constructor(props) {
+    super(props);
   }
 
   render() {
     return (
       <div className="Settings">
         <p>Settings</p>
-        <h3>BTC</h3>
-        <h3>ETH</h3>
-        <h3>LTC</h3>
-        <h3>BCH</h3>
+        
+        <select class="Settings__selected-currency">
+        {
+          this.props.currencies.map((currency) => {
+            return <option value="{currency}">{currency}</option>
+          })
+        }
+        </select>
+
+        <div class="Settings__moving-average">
+          <input class="Settings__checkbox" type="checkbox" value=""></input>
+          <p class="Settings__name">Moving Average</p>
+          <button class="Settings__add-button">+</button>
+        </div>
+
+        <div class="Settings__volume">
+          <input class="Settings__checkbox" type="checkbox" value=""></input>
+          <p class="Settings__name">Volume</p>
+        </div>
+
       </div>
     );
   }
