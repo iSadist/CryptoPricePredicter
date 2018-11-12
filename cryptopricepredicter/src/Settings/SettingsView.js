@@ -3,9 +3,10 @@ import MovingAverageView from './MovingAverage/MovingAverageView';
 import './SettingsView.scss';
 
 class SettingsView extends Component {
-
   constructor(props) {
     super(props);
+
+    console.log(props);
   }
 
   render() {
@@ -13,7 +14,7 @@ class SettingsView extends Component {
       <div className="Settings">
         <p>Settings</p>
 
-        <select class="Settings__selected-currency">
+        <select className="Settings__selected-currency">
         {
           this.props.currencies.map((currency) => {
             return <option value="{currency}">{currency}</option>
@@ -21,13 +22,12 @@ class SettingsView extends Component {
         }
         </select>
 
-        <MovingAverageView/>
+        <MovingAverageView movingAverages={this.props.settings.movingAverages}/>
 
-        <div class="Settings__volume">
-          <input class="Settings__checkbox" type="checkbox" value=""></input>
-          <p class="Settings__name">Volume</p>
+        <div className="Settings__volume">
+          <input className="Settings__checkbox" type="checkbox" value=""></input>
+          <p className="Settings__name">Volume</p>
         </div>
-
       </div>
     );
   }

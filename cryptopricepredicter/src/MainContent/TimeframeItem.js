@@ -8,7 +8,7 @@ class TimeframeItem extends Component {
 
   render() {
     return (
-      <span class="timeframe-item">{this.props.label}</span>
+      <span className="timeframe-item">{this.props.label}</span>
     );
   }
 }
