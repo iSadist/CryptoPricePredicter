@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import MovingAverageView from './MovingAverage/MovingAverageView';
 import './SettingsView.scss';
 
 class SettingsView extends Component {
@@ -11,7 +12,7 @@ class SettingsView extends Component {
     return (
       <div className="Settings">
         <p>Settings</p>
-        
+
         <select class="Settings__selected-currency">
         {
           this.props.currencies.map((currency) => {
@@ -20,11 +21,7 @@ class SettingsView extends Component {
         }
         </select>
 
-        <div class="Settings__moving-average">
-          <input class="Settings__checkbox" type="checkbox" value=""></input>
-          <p class="Settings__name">Moving Average</p>
-          <button class="Settings__add-button">+</button>
-        </div>
+        <MovingAverageView/>
 
         <div class="Settings__volume">
           <input class="Settings__checkbox" type="checkbox" value=""></input>
