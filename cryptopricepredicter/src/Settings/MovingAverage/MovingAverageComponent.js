@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import $ from 'jquery';
 
+import './MovingAverageComponent.scss'
+
 class MovingAverageComponent extends Component {
   constructor(props) {
     super(props);
@@ -18,7 +20,7 @@ class MovingAverageComponent extends Component {
   render() {
     return (
       <div className="Settings__moving-average-components">
-        <p>Color</p>
+        <p className="Settings__moving-average-title">Color</p>
         <select className="Settings__moving-average-colors">
           <option value="red">Red</option>
           <option value="blue">Blue</option>
@@ -26,9 +28,9 @@ class MovingAverageComponent extends Component {
           <option value="yellow">Yellow</option>
           <option value="purple">Purple</option>
         </select>
-        <p>Length</p>
+        <p className="Settings__moving-average-title">Length</p>
         <input className="Settings__moving-average-length" type="text" value={this.props.settings.time}></input>
-        <p>Units</p>
+        <p className="Settings__moving-average-title">Units</p>
         <select className="Settings__moving-average-units">
           <option value="days">Days</option>
           <option value="4hours">4 Hours</option>
