@@ -2,8 +2,9 @@ class UserSettings {
   constructor() {
     this.movingAverages = [
       {
+        id: 1,
         color: 'blue',
-        time: 21,
+        time: 15,
         units: '4hours'
       }
     ];

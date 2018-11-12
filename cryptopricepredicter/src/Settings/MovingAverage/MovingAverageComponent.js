@@ -11,6 +11,10 @@ class MovingAverageComponent extends Component {
     $('.Settings__moving-average-units').val(this.props.settings.units).change();
   }
 
+  remove() {
+    this.props.onRemove(this.props.settings)
+  }
+
   render() {
     return (
       <div className="Settings__moving-average-components">
@@ -32,6 +36,7 @@ class MovingAverageComponent extends Component {
           <option value="30minutes">30 Minutes</option>
           <option value="15minutes">15 Minutes</option>
         </select>
+        <button onClick={this.remove.bind(this)}>-</button>
       </div>
     )
   }
