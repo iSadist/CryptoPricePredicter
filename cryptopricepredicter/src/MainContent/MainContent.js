@@ -11,11 +11,11 @@ class MainContent extends Component {
 
     // Declare class variables
     this.augmentedPriceData = [
-      5413, 5899, 5220, 5650, 5615, 5802, 6200, 8500, 7543, 4350, 5413, 5899, 5220, 5650, 5615, 5802, 6200, 8500, 10000, 20000
+      5413, 5899, 5220, 5650, 5615, 5802, 6200, 8500, 7543, 4350, 5413, 5899, 5220, 5650, 5615, 5802, 6200, 8500, 10000, 20000, 1000, 2000
     ];
-    this.xLength = 100;
-    this.canvasWidth = 2000;
     this.canvasHeight = 1200;
+    this.canvasWidth = 2000;
+    this.xLength = this.canvasWidth / this.augmentedPriceData.length;
     this.priceGraphContext = undefined;
     this.startingMaxPrice = 20000;
     this.numberOfPriceLines = 5;
