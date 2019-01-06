@@ -20,6 +20,7 @@ class MainContent extends Component {
     this.startingMaxPrice = 20000;
     this.numberOfPriceLines = 5;
     this.priceLines = [];
+    this.priceChart = React.createRef();
 
     var tempPrice = this.startingMaxPrice;
 
@@ -37,6 +38,10 @@ class MainContent extends Component {
     this.priceCanvas = $('.Main-Content__price-chart');
     this.drawPrice();
     this.priceCanvas.mousemove(this.mousemove.bind(this));
+
+    this.setState({
+      priceChartLength: this.priceChart.current.scrollWidth / this.augmentedPriceData.length
+    });
   }
 
   drawPrice() {
@@ -151,7 +156,7 @@ class MainContent extends Component {
   render () {
     return (
       <div className="Main-Content">
-        <canvas className='Main-Content__price-chart' width="2000" height="1200"></canvas>
+        <canvas className='Main-Content__price-chart' width="2000" height="1200" ref={this.priceChart}></canvas>
         <div className="Main-Content__side-price" onMouseDown={this.mousedown.bind(this)} onMouseUp={this.mouseup.bind(this)} onMouseMove={this.mousemove.bind(this)}>
           {
             this.priceLines.map(function(value, index) {
@@ -162,8 +167,8 @@ class MainContent extends Component {
         <div className="Main-Content__timeframe">
           {
             this.augmentedPriceData.map(function(value, index) {
-              return <TimeframeItem label={index}/>
-            })
+              return <TimeframeItem label={index} width={this.state.priceChartLength}/>
+            }.bind(this))
           }
         </div>
       </div>

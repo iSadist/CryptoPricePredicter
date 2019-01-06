@@ -15,7 +15,7 @@ class TimeframeItem extends Component {
     const stylesDiv = {
       // TODO: feed the size of each box into this class in order to
       // render the label aligned with the grid
-      width: 80.9 + 'px',
+      width: this.props.width + 'px',
       display: 'inline-block',
     };
 
