@@ -6,9 +6,23 @@ class TimeframeItem extends Component {
     super(props);
   }
 
+
   render() {
+    const stylesSpan = {
+      width: 100 + 'vw',
+      position: 'relative',
+    };
+    const stylesDiv = {
+      // TODO: feed the size of each box into this class in order to
+      // render the label aligned with the grid
+      width: 80.9 + 'px',
+      display: 'inline-block',
+    };
+
     return (
-      <span className="timeframe-item">{this.props.label}</span>
+      <div style={stylesDiv}>
+        <span className="timeframe-item" style={stylesSpan}>{this.props.label}</span>
+      </div>
     );
   }
 }
