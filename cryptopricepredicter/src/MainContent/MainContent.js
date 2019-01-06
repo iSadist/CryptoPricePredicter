@@ -21,6 +21,7 @@ class MainContent extends Component {
     this.numberOfPriceLines = 5;
     this.priceLines = [];
     this.priceChart = React.createRef();
+    this.updateTimeframes = this.updateTimeframes.bind(this);
 
     var tempPrice = this.startingMaxPrice;
 
@@ -39,6 +40,15 @@ class MainContent extends Component {
     this.drawPrice();
     this.priceCanvas.mousemove(this.mousemove.bind(this));
 
+    this.updateTimeframes();
+    window.addEventListener("resize", this.updateTimeframes);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.updateTimeframes);
+  }
+
+  updateTimeframes() {
     this.setState({
       priceChartLength: this.priceChart.current.scrollWidth / this.augmentedPriceData.length
     });
