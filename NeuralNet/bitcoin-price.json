@@ -1,9 +1,4 @@
-/*
-  Link for getting the bitcoin historical price: https://api.coindesk.com/v1/bpi/historical/close.json
-  Data is fetched from https://www.coindesk.com/api
- */
-
- {
+{
     "bpi":{
        "2010-07-18":0.0858,
        "2010-07-19":0.0808,

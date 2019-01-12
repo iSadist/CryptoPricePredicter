@@ -1,10 +1,16 @@
 import tensorflow as tf
 from tensorflow import keras
+import json
 
 lookback_days = 90
 trained_model_file_path = "./Models/bitcoinprice.h5"
 
 # Load in the data from the JSON file
+
+bitcoin_price_data = {}
+
+with open('bitcoin-price.json') as json_data:
+    bitcoin_price_data = json.load(json_data)["bpi"]
 
 # Create a sequential network to look at the prices for the past days
 model = keras.Sequential([
