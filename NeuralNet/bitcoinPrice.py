@@ -8,7 +8,7 @@ trained_model_file_path = "./Models/bitcoinprice.h5"
 
 # Create a sequential network to look at the prices for the past days
 model = keras.Sequential([
-	    keras.layers.Dense(20, kernel_regularizer=keras.regularizers.l2(0.003), activation=tf.nn.relu), input_shape=(lookback_days, 1, 1), # Inputs are only the price for the last lookback_days
+	    keras.layers.Dense(20, kernel_regularizer=keras.regularizers.l2(0.003), activation=tf.nn.relu, input_shape=(lookback_days, 1, 1)), # Inputs are only the price for the last lookback_days
         # Add recurring layers
 	    keras.layers.Dense(20, kernel_regularizer=keras.regularizers.l2(0.003), activation=tf.nn.relu),
 	    keras.layers.Dense(1, activation=tf.nn.relu) # Only output one value, the price prediction
