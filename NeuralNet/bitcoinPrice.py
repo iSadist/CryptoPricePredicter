@@ -18,16 +18,35 @@ price_list = []
 for price in bitcoin_price_data.values():
     price_list.append(price)
 
-# Putting output the same as the input
-# Needs to be changed later on
-train_correct = price_list
-train_price = price_list
+# Setting up train data with input and label
+train_output = price_list[lookback_days-1::lookback_days]
+
+print(train_output)
+
+train_input = price_list
+del train_input[lookback_days-1::lookback_days];
+
+number_of_sections = int(len(train_input)/lookback_days)
+number_of_days = number_of_sections * lookback_days
+input_length = len(train_input)
+days_to_remove = len(train_input) - number_of_days
+train_input = np.asarray(train_input)
+train_input = train_input[days_to_remove:input_length]
+
+train_input = train_input.reshape((number_of_sections, lookback_days,))
+
+print(train_input.shape)
 
 # Create a sequential network to look at the prices for the past days
 model = keras.Sequential([
-	    keras.layers.Dense(20, activation=tf.nn.relu, input_shape=(1,)), # Inputs are only the price for the last lookback_days
+	    keras.layers.Dense(40, activation=tf.nn.relu, input_shape=(lookback_days,)), # Inputs are only the price for the last lookback_days
         # Add recurring layers
-	    keras.layers.Dense(20, activation=tf.nn.relu),
+	    keras.layers.Dense(40, activation=tf.nn.relu),
+        keras.layers.Dense(40, activation=tf.nn.relu),
+        keras.layers.Dense(40, activation=tf.nn.relu),
+        keras.layers.Dense(40, activation=tf.nn.relu),
+        keras.layers.Dense(40, activation=tf.nn.relu),
+        keras.layers.Dense(40, activation=tf.nn.relu),
 	    keras.layers.Dense(1, activation=tf.nn.relu) # Only output one value, the price prediction
 	])
 
@@ -37,9 +56,7 @@ model.compile(optimizer=keras.optimizers.Adam(),
 model.summary() # Print a summary of the model
 
 # Train the model
-model.fit(train_price, train_correct, epochs=20, batch_size=10, verbose=1)
-
-print(model.predict([6500]))
+model.fit(train_input, train_output, epochs=1000, batch_size=10, verbose=1)
 
 model.save(trained_model_file_path)
 
