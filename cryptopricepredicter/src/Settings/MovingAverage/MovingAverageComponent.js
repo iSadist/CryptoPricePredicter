@@ -1,27 +1,36 @@
 import React, { Component } from 'react';
-import $ from 'jquery';
-
 import './MovingAverageComponent.scss'
 
 class MovingAverageComponent extends Component {
-  constructor(props) {
-    super(props);
-  }
-
-  componentDidMount() {
-    $('.Settings__moving-average-colors').val(this.props.settings.color).change();
-    $('.Settings__moving-average-units').val(this.props.settings.units).change();
-  }
-
   remove() {
-    this.props.onRemove(this.props.settings)
-  }
+    this.props.onRemove(this.props.settings);
+  };
+
+  onColorChanged(event) {
+    this.props.settings.color = event.target.value;
+    this.onModelChanged.bind(this);
+  };
+
+  onLengthChanged(event) {
+    this.props.settings.color = event.target.value;
+    this.onModelChanged.bind(this);
+  };
+
+  onUnitsChanged(event) {
+    this.props.settings.color = event.target.value;
+    this.onModelChanged.bind(this);
+  };
+
+  onModelChanged() {
+    this.props.onChange(this);
+  };
 
   render() {
     return (
       <div className="Settings__moving-average-components">
         <p className="Settings__moving-average-title">Color</p>
-        <select className="Settings__moving-average-colors">
+        <select defaultValue={this.props.settings.color} className="Settings__moving-average-colors"
+          onChange={this.onColorChanged.bind(this)}>
           <option value="red">Red</option>
           <option value="blue">Blue</option>
           <option value="green">Green</option>
@@ -29,9 +38,14 @@ class MovingAverageComponent extends Component {
           <option value="purple">Purple</option>
         </select>
         <p className="Settings__moving-average-title">Length</p>
-        <input className="Settings__moving-average-length" type="text" value={this.props.settings.time}></input>
+        <input className="Settings__moving-average-length"
+          type="text"
+          defaultValue={this.props.settings.time}
+          onChange={this.onLengthChanged.bind(this)}>
+          </input>
         <p className="Settings__moving-average-title">Units</p>
-        <select className="Settings__moving-average-units">
+        <select defaultValue={this.props.settings.units} className="Settings__moving-average-units"
+          onChange={this.onUnitsChanged.bind(this)}>
           <option value="days">Days</option>
           <option value="4hours">4 Hours</option>
           <option value="1hours">1 Hour</option>

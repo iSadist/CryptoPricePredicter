@@ -6,19 +6,21 @@ import MainContent from './MainContent/MainContent.js';
 import UserSettings from './UserSettings';
 import './App.scss';
 
-const { currencies } = require('./config.js')
+const { currencies } = require('./config.js');
 
 class App extends Component {
   constructor(props) {
     super(props);
-    this.settings = new UserSettings();
+    this.state = {
+      settings: new UserSettings(),
+    };
   }
 
   render() {
     return (
       <div className="App">
         <Navbar/>
-        <SettingsView currencies={currencies} settings={this.settings}/>
+        <SettingsView currencies={currencies} settings={this.state.settings}/>
         <MainContent/>
         <Footer/>
       </div>

@@ -3,12 +3,6 @@ import MovingAverageView from './MovingAverage/MovingAverageView';
 import './SettingsView.scss';
 
 class SettingsView extends Component {
-  constructor(props) {
-    super(props);
-
-    console.log(props);
-  }
-
   render() {
     return (
       <div className="Settings">

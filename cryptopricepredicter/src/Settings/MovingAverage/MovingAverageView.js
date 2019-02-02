@@ -9,39 +9,54 @@ class MovingAverageView extends Component {
     super(props);
 
     this.state = {
-      movingAverages: this.props.movingAverages
-    }
+      movingAverages: this.props.movingAverages,
+    };
+    this.idCounter = this.state.movingAverages.length;
   }
 
   clickHandler(event) {
     this.addNewMovingAverage(
       {
-        id: this.state.movingAverages.length + 1,
+        id: this.idCounter + 1,
         color: 'red',
         time: 21,
-        units: 'days'
+        units: 'days',
       }
-    )
+    );
+    this.idCounter += 1;
   }
 
   addNewMovingAverage(item) {
     var averages = this.state.movingAverages;
     averages.push(item);
     this.setState({
-      movingAverages: averages
-    })
+      movingAverages: averages,
+    });
+  }
 
-    console.log(this.state.movingAverages);
+  updateMovingAverages(item) {
+    this.setState(state => {
+      const movingAverages = state.movingAverages.map( ma => {
+        if (item.props.settings.id = ma.id) {
+          ma.color = item.props.settings.color;
+          ma.time = item.props.settings.time;
+          ma.units = item.props.settings.units;
+        }
+      });
+      return {
+        movingAverages,
+      };
+    });
   }
 
   removeMovingAverage(movingAverage) {
     const filteredAverages = this.state.movingAverages.filter(ma => {
-      return ma.id != movingAverage.id
+      return ma.id !== movingAverage.id;
     });
 
     this.setState({
-      movingAverages: filteredAverages
-    })
+      movingAverages: filteredAverages,
+    });
   }
 
   render() {
@@ -53,7 +68,9 @@ class MovingAverageView extends Component {
 
         {
           this.state.movingAverages.map((ma) => {
-            return <MovingAverageComponent settings={ma} onRemove={this.removeMovingAverage.bind(this)}/>
+            return <MovingAverageComponent key={ma.id} settings={ma}
+              onRemove={this.removeMovingAverage.bind(this)}
+              onChange={this.updateMovingAverages.bind(this)}/>
           })
         }
 

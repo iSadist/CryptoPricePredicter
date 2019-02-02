@@ -3,10 +3,10 @@ class UserSettings {
     this.movingAverages = [
       {
         id: 1,
-        color: 'blue',
+        color: 'green',
         time: 15,
-        units: '4hours'
-      }
+        units: '4hours',
+      },
     ];
   }
 }
