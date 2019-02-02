@@ -62,3 +62,19 @@ typings/
 
 # Machine Learning models
 NeuralNet/Models/*
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# production
+/cryptopricepredicter/build
+
+# testing
+/cryptopricepredicter/coverage
+
+# dependencies
+/cryptopricepredicter/node_modules
