@@ -36,7 +36,7 @@ class MovingAverageView extends Component {
 
   updateMovingAverages(item) {
     this.setState(state => {
-      const movingAverages = state.movingAverages.map( ma => {
+      const movingAverages = state.movingAverages.map(ma => {
         if (item.props.settings.id = ma.id) {
           ma.color = item.props.settings.color;
           ma.time = item.props.settings.time;
@@ -67,10 +67,10 @@ class MovingAverageView extends Component {
         <button className="Settings__add-button" onClick={this.clickHandler.bind(this)}>+</button>
 
         {
-          this.state.movingAverages.map((ma) => {
+          this.state.movingAverages.map(ma => {
             return <MovingAverageComponent key={ma.id} settings={ma}
               onRemove={this.removeMovingAverage.bind(this)}
-              onChange={this.updateMovingAverages.bind(this)}/>
+              onChange={this.updateMovingAverages.bind(this)}/>;
           })
         }
 

@@ -20,7 +20,7 @@ class App extends Component {
     return (
       <div className="App">
         <Navbar/>
-        <SettingsView currencies={currencies} settings={this.state.settings}/>
+        <SettingsView currencies={currencies}/>
         <MainContent/>
         <Footer/>
       </div>

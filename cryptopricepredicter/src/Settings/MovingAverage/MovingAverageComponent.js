@@ -54,9 +54,8 @@ class MovingAverageComponent extends Component {
         </select>
         <button onClick={this.remove.bind(this)}>-</button>
       </div>
-    )
+    );
   }
-
 }
 
 export default MovingAverageComponent;
