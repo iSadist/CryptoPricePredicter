@@ -15,7 +15,6 @@ class MovingAverageView extends Component {
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    console.log(this.state.movingAverages);
     this.props.onUpdate(this.state.movingAverages);
   }
 
@@ -40,7 +39,6 @@ class MovingAverageView extends Component {
   }
 
   updateMovingAverages(item) {
-    console.log("updating");
     this.setState(state => {
       const movingAverages = state.movingAverages.map(ma => {
         if (item.props.settings.id = ma.id) {
