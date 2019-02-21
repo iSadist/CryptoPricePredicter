@@ -21,7 +21,11 @@ const store = createStore(combinedReducers, {
       units: '4hours',
     },
   ],
-});
+},
+window.devToolsExtension && window.devToolsExtension()
+);
+
+window.devToolsExtension && window.devToolsExtension();
 
 ReactDOM.render(<Provider store={store}><App /></Provider>, document.getElementById('root'));
 registerServiceWorker();
