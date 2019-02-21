@@ -3,6 +3,7 @@ import MovingAverageView from './MovingAverage/MovingAverageView';
 import './SettingsView.scss';
 
 import { connect } from 'react-redux';
+import { updateMovingAverages } from '../Actions/movingAverage-actions';
 
 class SettingsView extends Component {
   constructor(props) {
@@ -22,7 +23,9 @@ class SettingsView extends Component {
         }
         </select>
 
-        <MovingAverageView movingAverages={this.props.movingAverages}/>
+        <MovingAverageView
+          movingAverages={this.props.movingAverages}
+          onUpdate={this.props.onUpdateMovingAverages}/>
 
         <div className="Settings__volume">
           <input className="Settings__checkbox" type="checkbox" value=""></input>
@@ -38,7 +41,7 @@ const mapStateToProps = state => ({
 });
 
 const mapActionsToProps = {
-
+  onUpdateMovingAverages: updateMovingAverages,
 };
 
 export default connect(mapStateToProps, mapActionsToProps)(SettingsView);

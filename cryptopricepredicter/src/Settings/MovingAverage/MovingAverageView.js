@@ -14,6 +14,11 @@ class MovingAverageView extends Component {
     this.idCounter = this.state.movingAverages.length;
   }
 
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    console.log(this.state.movingAverages);
+    this.props.onUpdate(this.state.movingAverages);
+  }
+
   clickHandler(event) {
     this.addNewMovingAverage(
       {
@@ -35,6 +40,7 @@ class MovingAverageView extends Component {
   }
 
   updateMovingAverages(item) {
+    console.log("updating");
     this.setState(state => {
       const movingAverages = state.movingAverages.map(ma => {
         if (item.props.settings.id = ma.id) {
@@ -42,11 +48,15 @@ class MovingAverageView extends Component {
           ma.time = item.props.settings.time;
           ma.units = item.props.settings.units;
         }
+
+        return ma;
       });
+
       return {
         movingAverages,
       };
     });
+    this.props.onUpdate(this.state.movingAverages);
   }
 
   removeMovingAverage(movingAverage) {
