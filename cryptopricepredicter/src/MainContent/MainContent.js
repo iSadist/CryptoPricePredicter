@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './MainContent.scss';
 import PriceBubble from './PriceBubble.js';
+import Timeframe from './Timeframe.js'
 import TimeframeItem from './TimeframeItem.js'
 import $ from 'jquery';
 
@@ -167,20 +168,22 @@ class MainContent extends Component {
     return (
       <div className="Main-Content">
         <canvas className='Main-Content__price-chart' width="2000" height="1200" ref={this.priceChart}></canvas>
-        <div className="Main-Content__side-price" onMouseDown={this.mousedown.bind(this)} onMouseUp={this.mouseup.bind(this)} onMouseMove={this.mousemove.bind(this)}>
+        <div className="Main-Content__side-price"
+          onMouseDown={this.mousedown.bind(this)}
+          onMouseUp={this.mouseup.bind(this)}
+          onMouseMove={this.mousemove.bind(this)}>
           {
             this.priceLines.map(function(value, index) {
-              return <PriceBubble PriceBubble price={value} maxPrice={this.state.currentMaxChartPrice} canvasHeight={this.canvasHeight} height={1300} number={index+1} />
+              return <PriceBubble PriceBubble price={value}
+                        maxPrice={this.state.currentMaxChartPrice}
+                        canvasHeight={this.canvasHeight}
+                        height={1300}
+                        number={index+1} />
             }.bind(this))
           }
         </div>
-        <div className="Main-Content__timeframe">
-          {
-            this.augmentedPriceData.map(function(value, index) {
-              return <TimeframeItem label={index} width={this.state.priceChartLength}/>
-            }.bind(this))
-          }
-        </div>
+        <Timeframe augmentedPriceData={this.augmentedPriceData}
+          length={this.state.priceChartLength}/>
       </div>
     );
   }
