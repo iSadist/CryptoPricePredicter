@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import './MainContent.scss'
 
 class TimeframeItem extends Component {
 
@@ -16,7 +17,7 @@ class TimeframeItem extends Component {
 
     return (
       <div style={stylesDiv}>
-        <span className="timeframe-item" style={stylesSpan}>{this.props.label}</span>
+        <span className="Main-Content__timeframe-item" style={stylesSpan}>{this.props.label}</span>
       </div>
     );
   }

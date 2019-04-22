@@ -2,38 +2,31 @@ import React, { Component } from 'react';
 import './MainContent.scss';
 import PriceBubble from './PriceBubble.js';
 import Timeframe from './Timeframe.js'
-import TimeframeItem from './TimeframeItem.js'
 import $ from 'jquery';
+import { augmentedPriceData } from '../data';
+import _ from 'underscore';
 
 class MainContent extends Component {
 
   constructor (props) {
     super(props);
 
-    // Declare class variables
-    this.augmentedPriceData = [
-      5413, 5899, 5220, 5650, 5615, 5802, 6200, 8500, 7543, 4350, 5413, 5899, 5220, 5650, 5615, 5802, 6200, 8500, 10000, 20000, 1000, 2000
-    ];
+    this.priceData = augmentedPriceData;
+    this.priceChart = React.createRef();
     this.canvasHeight = 1200;
     this.canvasWidth = 2000;
-    this.xLength = this.canvasWidth / this.augmentedPriceData.length;
     this.priceGraphContext = undefined;
     this.startingMaxPrice = 20000;
     this.numberOfPriceLines = 5;
-    this.priceLines = [];
-    this.priceChart = React.createRef();
-    this.updateTimeframes = this.updateTimeframes.bind(this);
 
-    var tempPrice = this.startingMaxPrice;
-
-    for (var i = 0; i < this.numberOfPriceLines; i++) {
-      this.priceLines.push(tempPrice);
-      tempPrice -= this.startingMaxPrice / this.numberOfPriceLines;
-    }
+    this.drawInitialPriceLines();
 
     this.state = {
       currentMaxChartPrice: this.startingMaxPrice
     };
+
+    this.updateChartData();
+    this.updateTimeframes = this.updateTimeframes.bind(this);
   }
 
   componentDidMount() {
@@ -51,7 +44,7 @@ class MainContent extends Component {
 
   updateTimeframes() {
     this.setState({
-      priceChartLength: this.priceChart.current.scrollWidth / this.augmentedPriceData.length
+      priceChartLength: this.priceChart.current.scrollWidth / this.visiblePriceData.length
     });
   }
 
@@ -59,13 +52,13 @@ class MainContent extends Component {
     var priceContext = this.priceCanvas[0].getContext('2d');
     this.priceGraphContext = priceContext;
 
-    var startingPoint = this.convertPricePointToCanvasPoint(this.augmentedPriceData[0]);
+    var startingPoint = this.convertPricePointToCanvasPoint(this.visiblePriceData[0].value);
     priceContext.beginPath();
     priceContext.moveTo(0, startingPoint);
 
     // Draw price graph
-    for (var i = 1; i <= this.augmentedPriceData.length; i++) {
-      var canvasPoint = this.convertPricePointToCanvasPoint(this.augmentedPriceData[i-1]);
+    for (var i = 1; i <= this.visiblePriceData.length; i++) {
+      var canvasPoint = this.convertPricePointToCanvasPoint(this.visiblePriceData[i-1].value);
       priceContext.lineTo(i*(this.xLength), canvasPoint);
     }
 
@@ -79,7 +72,7 @@ class MainContent extends Component {
     }
 
     // Draw Vertical lines
-    for (var k = 0; k < this.augmentedPriceData.length; k++) {
+    for (var k = 0; k < this.visiblePriceData.length; k++) {
       this.drawVerticalLine(k*(this.xLength));
     }
   }
@@ -87,6 +80,16 @@ class MainContent extends Component {
   redrawPrice() {
     this.clearDrawing();
     this.drawPrice();
+  }
+
+  drawInitialPriceLines() {
+    this.priceLines = [];
+    var tempPrice = this.startingMaxPrice;
+
+    for (var i = 0; i < this.numberOfPriceLines; i++) {
+      this.priceLines.push(tempPrice);
+      tempPrice -= this.startingMaxPrice / this.numberOfPriceLines;
+    }
   }
 
   drawPriceLine(price) {
@@ -164,6 +167,17 @@ class MainContent extends Component {
     this.previousPageY = this.pageY;
   }
 
+  adjustTime(startIndex, endIndex) {
+    this.updateChartData(startIndex, endIndex);
+    this.updateTimeframes();
+    this.redrawPrice();
+  }
+
+  updateChartData(startIndex, endIndex) {
+    this.visiblePriceData = this.priceData.slice(startIndex, endIndex);
+    this.xLength = this.canvasWidth / this.visiblePriceData.length;
+  }
+
   render () {
     return (
       <div className="Main-Content">
@@ -182,8 +196,10 @@ class MainContent extends Component {
             }.bind(this))
           }
         </div>
-        <Timeframe augmentedPriceData={this.augmentedPriceData}
-          length={this.state.priceChartLength}/>
+        <Timeframe priceData={this.visiblePriceData}
+          maxIndex={this.priceData.length}
+          length={this.state.priceChartLength}
+          onIndexChanged={this.adjustTime.bind(this)} />
       </div>
     );
   }
