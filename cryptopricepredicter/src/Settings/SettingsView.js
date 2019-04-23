@@ -6,10 +6,6 @@ import { connect } from 'react-redux';
 import { updateMovingAverages } from '../Actions/movingAverage-actions';
 
 class SettingsView extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (
       <div className="Settings">

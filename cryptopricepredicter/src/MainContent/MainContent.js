@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import './MainContent.scss';
-import PriceBubble from './PriceBubble.js';
-import Timeframe from './Timeframe.js'
+import Timeframe from './Timeframe'
+import PriceAxis from './PriceAxis'
 import $ from 'jquery';
 import { augmentedPriceData } from '../data';
-import _ from 'underscore';
 
 class MainContent extends Component {
 
@@ -13,11 +12,14 @@ class MainContent extends Component {
 
     this.priceData = augmentedPriceData;
     this.priceChart = React.createRef();
-    this.canvasHeight = 1200;
-    this.canvasWidth = 2000;
+    this.canvasHeight = 1800;
+    this.canvasWidth = 3000;
     this.priceGraphContext = undefined;
     this.startingMaxPrice = 20000;
     this.numberOfPriceLines = 5;
+    this.startIndex = 0;
+    this.endIndex = this.priceData.length;
+    this.maxEndIndex = this.endIndex;
 
     this.drawInitialPriceLines();
 
@@ -27,12 +29,15 @@ class MainContent extends Component {
 
     this.updateChartData();
     this.updateTimeframes = this.updateTimeframes.bind(this);
+    this.adjustmaxPrice = this.adjustmaxPrice.bind(this);
   }
 
   componentDidMount() {
     this.priceCanvas = $('.Main-Content__price-chart');
     this.drawPrice();
     this.priceCanvas.mousemove(this.mousemove.bind(this));
+    this.priceCanvas.mousedown(this.mousedown.bind(this));
+    this.priceCanvas.mouseup(this.mouseup.bind(this));
 
     this.updateTimeframes();
     window.addEventListener("resize", this.updateTimeframes);
@@ -123,26 +128,53 @@ class MainContent extends Component {
   }
 
   clearDrawing() {
-    this.priceGraphContext.clearRect(0, 0, 2000, 1200);
+    this.priceGraphContext.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
   }
 
   convertPricePointToCanvasPoint(price) {
     return this.canvasHeight - price / (this.state.currentMaxChartPrice/this.canvasHeight);
   }
 
+  shift(steps) {
+    if (this.startIndex - steps < 0 || this.endIndex - steps > this.maxEndIndex) {
+      return
+    }
+
+    this.startIndex -= steps
+    this.endIndex -= steps
+    this.updateChartData()
+    this.updateTimeframes()
+  }
+
+  zoomIn(steps) {
+
+  }
+
+  zoomOut(steps) {
+
+  }
+
   // Event handlers
 
   mousedown(e) {
-    this.previousPageY = e.pageY;
+    this.scrollingInView = true;
+    this.lastMouseDownX = e.clientX;
+    this.stepsShifted = 0
   }
 
   mouseup() {
-    this.previousPageY = undefined;
+    this.scrollingInView = false;
   }
 
   mousemove(e) {
-    if (this.previousPageY) {
-      this.adjustmaxPrice(e);
+    if (this.scrollingInView) {
+      const diff = this.lastMouseDownX - e.clientX
+      const hundreds = Math.floor(diff/50)
+
+      if (this.stepsShifted !== hundreds) {
+        this.shift(this.stepsShifted - hundreds)
+        this.stepsShifted = hundreds
+      }
     }
 
     var boundingRect = this.priceCanvas[0].getBoundingClientRect();
@@ -157,45 +189,46 @@ class MainContent extends Component {
     this.redrawPrice();
   }
 
-  adjustmaxPrice(e) {
-    this.pageY = e.pageY;
-    var newMaxPrice = this.state.currentMaxChartPrice - (this.pageY - this.previousPageY) * 100;
-
+  adjustmaxPrice(newMaxPrice) {
     this.setState({
       currentMaxChartPrice: newMaxPrice
     });
-    this.previousPageY = this.pageY;
+    this.redrawPrice();
   }
 
-  adjustTime(startIndex, endIndex) {
-    this.updateChartData(startIndex, endIndex);
+  adjustTime(steps) {
+    const newStartIndex = this.startIndex + steps
+    const newEndIndex = this.endIndex - steps
+
+    if (newStartIndex >= 0) {
+      this.startIndex += steps;
+    }
+
+    if (newEndIndex <= this.maxEndIndex) {
+      this.endIndex -= steps;
+    }
+
+    this.updateChartData();
     this.updateTimeframes();
     this.redrawPrice();
   }
 
-  updateChartData(startIndex, endIndex) {
-    this.visiblePriceData = this.priceData.slice(startIndex, endIndex);
+  updateChartData() {
+    this.visiblePriceData = this.priceData.slice(this.startIndex, this.endIndex);
     this.xLength = this.canvasWidth / this.visiblePriceData.length;
   }
 
   render () {
     return (
       <div className="Main-Content">
-        <canvas className='Main-Content__price-chart' width="2000" height="1200" ref={this.priceChart}></canvas>
-        <div className="Main-Content__side-price"
-          onMouseDown={this.mousedown.bind(this)}
-          onMouseUp={this.mouseup.bind(this)}
-          onMouseMove={this.mousemove.bind(this)}>
-          {
-            this.priceLines.map(function(value, index) {
-              return <PriceBubble PriceBubble price={value}
-                        maxPrice={this.state.currentMaxChartPrice}
-                        canvasHeight={this.canvasHeight}
-                        height={1300}
-                        number={index+1} />
-            }.bind(this))
-          }
-        </div>
+        <canvas className='Main-Content__price-chart'
+          width={this.canvasWidth}
+          height={this.canvasHeight}
+          ref={this.priceChart}></canvas>
+        <PriceAxis priceLines={this.priceLines}
+          height={this.canvasHeight}
+          currentMaxChartPrice={this.state.currentMaxChartPrice}
+          onChange={this.adjustmaxPrice.bind(this)} />
         <Timeframe priceData={this.visiblePriceData}
           maxIndex={this.priceData.length}
           length={this.state.priceChartLength}

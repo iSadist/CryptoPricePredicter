@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import MovingAverageComponent from './MovingAverageComponent';
 
-const { maxMovingAverages } = require('../../config');
-
 class MovingAverageView extends Component {
 
   constructor(props) {
@@ -41,7 +39,7 @@ class MovingAverageView extends Component {
   updateMovingAverages(item) {
     this.setState(state => {
       const movingAverages = state.movingAverages.map(ma => {
-        if (item.props.settings.id = ma.id) {
+        if (item.props.settings.id === ma.id) {
           ma.color = item.props.settings.color;
           ma.time = item.props.settings.time;
           ma.units = item.props.settings.units;

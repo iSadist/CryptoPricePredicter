@@ -8,56 +8,36 @@ class Timeframe extends Component {
     super(props)
 
     this.mouseDownX = undefined
-    this.currentStartIndex = 0
-    this.currentEndIndex = this.props.priceData.length
+    this.adjustingFrame = false
 
     this.mousedown = this.mousedown.bind(this)
     this.mouseup = this.mouseup.bind(this)
     this.mousemove = this.mousemove.bind(this)
-
-    this.state = {
-      startIndex: 0,
-      endIndex: this.props.priceData.length,
-      adjustingFrame: false
-    }
   }
 
   mousedown(event) {
     this.mouseDownX = event.clientX
-    this.setState({
-      adjustingFrame: true
-    })
+    this.lastStep = 0
+    this.adjustingFrame = true
   }
 
   mouseup(event) {
-    this.currentStartIndex = this.state.startIndex
-    this.currentEndIndex = this.state.endIndex
-    this.setState({
-      adjustingFrame: false
-    })
+    this.adjustingFrame = false
   }
 
   mousemove(event) {
-    if(this.state.adjustingFrame) {
+    if(this.adjustingFrame) {
       const diff = this.mouseDownX - event.clientX
-      const hundreds = Math.floor(diff/100)
-      const newStartIndex = Math.max(this.currentStartIndex + hundreds, 0);
-      const newEndIndex = Math.min(this.currentEndIndex - hundreds, this.props.maxIndex);
+      const hundreds = Math.floor(diff/50)
 
-      if(newStartIndex !== this.state.startIndex && newEndIndex - newStartIndex > 2) {
-        this.props.onIndexChanged(newStartIndex, newEndIndex)
-        this.setState({
-          startIndex: newStartIndex,
-          endIndex: newEndIndex
-        })
+      if(hundreds !== this.lastStep) {
+        this.props.onIndexChanged(hundreds - this.lastStep)
+        this.lastStep = hundreds
       }
     }
   }
 
   render() {
-    const start = this.state.startIndex
-    const end = this.state.endIndex
-
     return (
       <div className="Main-Content__timeframe"
         onMouseDown={this.mousedown}
