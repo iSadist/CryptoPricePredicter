@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import $ from 'jquery';
 import './MainContent.scss';
 import Timeframe from './Timeframe'
 import PriceAxis from './PriceAxis'
-import $ from 'jquery';
 import { augmentedPriceData } from '../data';
 
 class MainContent extends Component {
@@ -10,7 +11,7 @@ class MainContent extends Component {
   constructor (props) {
     super(props);
 
-    this.priceData = augmentedPriceData;
+    this.loadedPriceData = augmentedPriceData;
     this.priceChart = React.createRef();
     this.canvasHeight = 1800;
     this.canvasWidth = 3000;
@@ -18,7 +19,7 @@ class MainContent extends Component {
     this.startingMaxPrice = 20000;
     this.numberOfPriceLines = 5;
     this.startIndex = 0;
-    this.endIndex = this.priceData.length;
+    this.endIndex = this.loadedPriceData.length;
     this.maxEndIndex = this.endIndex;
 
     this.drawInitialPriceLines();
@@ -67,7 +68,7 @@ class MainContent extends Component {
       priceContext.lineTo(i*(this.xLength), canvasPoint);
     }
 
-    priceContext.lineWidth = 5;
+    priceContext.lineWidth = 3;
     priceContext.strokeStyle = '#ff0000';
     priceContext.stroke();
 
@@ -214,7 +215,7 @@ class MainContent extends Component {
   }
 
   updateChartData() {
-    this.visiblePriceData = this.priceData.slice(this.startIndex, this.endIndex);
+    this.visiblePriceData = this.loadedPriceData.slice(this.startIndex, this.endIndex);
     this.xLength = this.canvasWidth / this.visiblePriceData.length;
   }
 
@@ -230,7 +231,7 @@ class MainContent extends Component {
           currentMaxChartPrice={this.state.currentMaxChartPrice}
           onChange={this.adjustmaxPrice.bind(this)} />
         <Timeframe priceData={this.visiblePriceData}
-          maxIndex={this.priceData.length}
+          maxIndex={this.loadedPriceData.length}
           length={this.state.priceChartLength}
           onIndexChanged={this.adjustTime.bind(this)} />
       </div>
@@ -238,4 +239,8 @@ class MainContent extends Component {
   }
 }
 
-export default MainContent;
+const mapStateToProps = state => ({
+  movingAverages: state.movingAverages
+});
+
+export default connect(mapStateToProps)(MainContent);

@@ -12,12 +12,12 @@ class MovingAverageComponent extends Component {
   };
 
   onLengthChanged(event) {
-    this.props.settings.color = event.target.value;
+    this.props.settings.time = event.target.value;
     this.onModelChanged();
   };
 
   onUnitsChanged(event) {
-    this.props.settings.color = event.target.value;
+    this.props.settings.units = event.target.value;
     this.onModelChanged();
   };
 

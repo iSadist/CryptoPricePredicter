@@ -13,8 +13,8 @@ class SettingsView extends Component {
 
         <select className="Settings__selected-currency">
         {
-          this.props.currencies.map((currency) => {
-            return <option value="{currency}">{currency}</option>
+          this.props.currencies.map((currency, index) => {
+            return <option value="{currency}" key={index}>{currency}</option>
           })
         }
         </select>
