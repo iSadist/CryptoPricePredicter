@@ -12,7 +12,7 @@ class MovingAverageComponent extends Component {
   };
 
   onLengthChanged(event) {
-    this.props.settings.time = event.target.value;
+    this.props.settings.time = parseInt(event.target.value, 10);
     this.onModelChanged();
   };
 

@@ -34,6 +34,9 @@ class MovingAverageView extends Component {
     this.setState({
       movingAverages: averages,
     });
+
+    const component = <MovingAverageComponent settings={item} />
+    this.updateMovingAverages(component);
   }
 
   updateMovingAverages(item) {

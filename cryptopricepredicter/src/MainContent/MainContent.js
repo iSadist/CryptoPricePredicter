@@ -1,15 +1,19 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import $ from 'jquery';
+import _ from 'underscore';
 import './MainContent.scss';
 import Timeframe from './Timeframe'
 import PriceAxis from './PriceAxis'
 import { augmentedPriceData } from '../data';
+import { calculateMovingAverage } from './Utility'
 
 class MainContent extends Component {
 
   constructor (props) {
     super(props);
+
+    // TODO: Create a model for this view since it is growing large
 
     this.loadedPriceData = augmentedPriceData;
     this.priceChart = React.createRef();
@@ -21,6 +25,7 @@ class MainContent extends Component {
     this.startIndex = 0;
     this.endIndex = this.loadedPriceData.length;
     this.maxEndIndex = this.endIndex;
+    this.movingAveragePriceData = [];
 
     this.drawInitialPriceLines();
 
@@ -48,29 +53,50 @@ class MainContent extends Component {
     window.removeEventListener("resize", this.updateTimeframes);
   }
 
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    this.redrawPrice()
+  }
+
   updateTimeframes() {
     this.setState({
       priceChartLength: this.priceChart.current.scrollWidth / this.visiblePriceData.length
     });
   }
 
-  drawPrice() {
+  drawGraph(data, color) {
+    if (!data[0]) {
+      return
+    }
+
     var priceContext = this.priceCanvas[0].getContext('2d');
     this.priceGraphContext = priceContext;
 
-    var startingPoint = this.convertPricePointToCanvasPoint(this.visiblePriceData[0].value);
+    var startingPoint = this.convertPricePointToCanvasPoint(data[0].value);
     priceContext.beginPath();
     priceContext.moveTo(0, startingPoint);
 
     // Draw price graph
-    for (var i = 1; i <= this.visiblePriceData.length; i++) {
-      var canvasPoint = this.convertPricePointToCanvasPoint(this.visiblePriceData[i-1].value);
+    for (var i = 1; i <= data.length; i++) {
+      var canvasPoint = this.convertPricePointToCanvasPoint(data[i-1].value);
       priceContext.lineTo(i*(this.xLength), canvasPoint);
     }
 
     priceContext.lineWidth = 3;
-    priceContext.strokeStyle = '#ff0000';
+    priceContext.strokeStyle = color;
     priceContext.stroke();
+  }
+
+  drawPrice() {
+    _.each(this.props.movingAverages, function(item) {
+      const movingAverage = calculateMovingAverage(this.visiblePriceData, item.time);
+      this.drawGraph(movingAverage, '#1b98e8');
+    }.bind(this))
+
+    this.drawGraph(this.visiblePriceData, '#ff0000');
+  }
+
+  redrawPrice() {
+    this.clearDrawing();
 
     // Draw Horizonatal lines
     for (var j = 0; j < this.priceLines.length; j++) {
@@ -81,10 +107,7 @@ class MainContent extends Component {
     for (var k = 0; k < this.visiblePriceData.length; k++) {
       this.drawVerticalLine(k*(this.xLength));
     }
-  }
 
-  redrawPrice() {
-    this.clearDrawing();
     this.drawPrice();
   }
 
