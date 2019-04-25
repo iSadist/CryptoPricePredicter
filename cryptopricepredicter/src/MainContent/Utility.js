@@ -31,3 +31,20 @@ export const calculateMovingAverage = (data, length) => {
 
   return movingAverage
 }
+
+export const translateToColorHex = (colorName) => {
+  switch (colorName) {
+    case "green":
+      return '#34c735';
+    case "yellow":
+      return '#f5ff3c';
+    case 'red':
+      return '#de2915';
+    case 'blue':
+      return '#3372dd';
+    case 'purple':
+      return '#aa2dd0';
+    default:
+      return '#000000';
+  }
+}

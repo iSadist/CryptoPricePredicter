@@ -6,7 +6,7 @@ import './MainContent.scss';
 import Timeframe from './Timeframe'
 import PriceAxis from './PriceAxis'
 import { augmentedPriceData } from '../data';
-import { calculateMovingAverage } from './Utility'
+import { calculateMovingAverage, translateToColorHex } from './Utility'
 
 class MainContent extends Component {
 
@@ -25,7 +25,9 @@ class MainContent extends Component {
     this.startIndex = 0;
     this.endIndex = this.loadedPriceData.length;
     this.maxEndIndex = this.endIndex;
-    this.movingAveragePriceData = [];
+
+    this.loadedMovingAveragePriceData = [];
+    this.visibleMovingAveragePriceData = [];
 
     this.drawInitialPriceLines();
 
@@ -40,12 +42,14 @@ class MainContent extends Component {
 
   componentDidMount() {
     this.priceCanvas = $('.Main-Content__price-chart');
-    this.drawPrice();
     this.priceCanvas.mousemove(this.mousemove.bind(this));
     this.priceCanvas.mousedown(this.mousedown.bind(this));
     this.priceCanvas.mouseup(this.mouseup.bind(this));
 
+    this.updateMovingAverages()
+    this.updateChartData();
     this.updateTimeframes();
+    this.drawPrice();
     window.addEventListener("resize", this.updateTimeframes);
   }
 
@@ -54,7 +58,27 @@ class MainContent extends Component {
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
+    if (this.props.movingAverages === prevProps) {
+      return;
+    }
+
+    this.updateMovingAverages()
+    this.updateChartData()
     this.redrawPrice()
+  }
+
+  updateMovingAverages() {
+    this.loadedMovingAveragePriceData = []
+
+    _.each(this.props.movingAverages, function(item) {
+      const movingAverage = calculateMovingAverage(this.loadedPriceData, item.time);
+      const hexColor = translateToColorHex(item.color);
+
+      this.loadedMovingAveragePriceData.push({
+        color: hexColor,
+        data: movingAverage
+      })
+    }.bind(this))
   }
 
   updateTimeframes() {
@@ -81,15 +105,14 @@ class MainContent extends Component {
       priceContext.lineTo(i*(this.xLength), canvasPoint);
     }
 
-    priceContext.lineWidth = 3;
+    priceContext.lineWidth = 5;
     priceContext.strokeStyle = color;
     priceContext.stroke();
   }
 
   drawPrice() {
-    _.each(this.props.movingAverages, function(item) {
-      const movingAverage = calculateMovingAverage(this.visiblePriceData, item.time);
-      this.drawGraph(movingAverage, '#1b98e8');
+    _.each(this.visibleMovingAveragePriceData, function(item) {
+      this.drawGraph(item.data, item.color);
     }.bind(this))
 
     this.drawGraph(this.visiblePriceData, '#ff0000');
@@ -238,6 +261,14 @@ class MainContent extends Component {
   }
 
   updateChartData() {
+    this.visibleMovingAveragePriceData = [];
+    _.each(this.loadedMovingAveragePriceData, function(movingAverage) {
+      this.visibleMovingAveragePriceData.push({
+        color: movingAverage.color,
+        data: movingAverage.data.slice(this.startIndex, this.endIndex)
+      })
+    }.bind(this))
+
     this.visiblePriceData = this.loadedPriceData.slice(this.startIndex, this.endIndex);
     this.xLength = this.canvasWidth / this.visiblePriceData.length;
   }
