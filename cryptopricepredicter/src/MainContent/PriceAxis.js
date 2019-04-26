@@ -11,6 +11,10 @@ class PriceAxis extends Component {
     this.mousedown = this.mousedown.bind(this)
     this.mousemove = this.mousemove.bind(this)
     this.adjustMaxPrice = this.adjustMaxPrice.bind(this)
+
+    this.state = {
+      priceLines: this.props.priceLines
+    }
   }
 
   mousedown(e) {
@@ -35,7 +39,6 @@ class PriceAxis extends Component {
   }
 
   render() {
-
     return (
       <div className="Main-Content__side-price"
         onMouseDown={this.mousedown}

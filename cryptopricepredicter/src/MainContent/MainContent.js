@@ -29,10 +29,11 @@ class MainContent extends Component {
     this.loadedMovingAveragePriceData = [];
     this.visibleMovingAveragePriceData = [];
 
-    this.drawInitialPriceLines();
+    this.calculatePriceLines();
 
     this.state = {
-      currentMaxChartPrice: this.startingMaxPrice
+      currentMaxChartPrice: this.startingMaxPrice,
+      priceLines: this.priceLines
     };
 
     this.updateChartData();
@@ -134,14 +135,19 @@ class MainContent extends Component {
     this.drawPrice();
   }
 
-  drawInitialPriceLines() {
+  calculatePriceLines() {
     this.priceLines = [];
-    var tempPrice = this.startingMaxPrice;
+    var tempPrice = 0;
+    var currentMaxChartPrice = this.state ? this.state.currentMaxChartPrice : this.startingMaxPrice;
 
-    for (var i = 0; i < this.numberOfPriceLines; i++) {
+    for (var i = this.numberOfPriceLines * 2; i > 0; i--) {
+      tempPrice += currentMaxChartPrice / this.numberOfPriceLines;
       this.priceLines.push(tempPrice);
-      tempPrice -= this.startingMaxPrice / this.numberOfPriceLines;
     }
+
+    this.setState({
+      priceLines: this.priceLines
+    });
   }
 
   drawPriceLine(price) {
@@ -237,6 +243,17 @@ class MainContent extends Component {
   }
 
   adjustmaxPrice(newMaxPrice) {
+    // Make sure the price lines always spread out on the graph
+    if(newMaxPrice / 2 > this.startingMaxPrice) {
+      this.calculatePriceLines();
+      this.startingMaxPrice *= 2;
+    }
+
+    if(newMaxPrice < this.startingMaxPrice / 2) {
+      this.calculatePriceLines();
+      this.startingMaxPrice /= 2;
+    }
+
     this.setState({
       currentMaxChartPrice: newMaxPrice
     });
@@ -274,13 +291,16 @@ class MainContent extends Component {
   }
 
   render () {
+
+
+
     return (
       <div className="Main-Content">
         <canvas className='Main-Content__price-chart'
           width={this.canvasWidth}
           height={this.canvasHeight}
           ref={this.priceChart}></canvas>
-        <PriceAxis priceLines={this.priceLines}
+        <PriceAxis priceLines={this.state.priceLines}
           height={this.canvasHeight}
           currentMaxChartPrice={this.state.currentMaxChartPrice}
           onChange={this.adjustmaxPrice.bind(this)} />
