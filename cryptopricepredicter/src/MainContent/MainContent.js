@@ -291,9 +291,6 @@ class MainContent extends Component {
   }
 
   render () {
-
-
-
     return (
       <div className="Main-Content">
         <canvas className='Main-Content__price-chart'
