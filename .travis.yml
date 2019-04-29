@@ -2,7 +2,8 @@ language: node_js
 node_js:
   - "stable"
 
-script: cd ./cryptopricepredicter/ && npm install && npm run test
+install: cd ./cryptopricepredicter/ && npm install
+script: cd ./cryptopricepredicter/ && npm run test
 
 branches:
   only:
