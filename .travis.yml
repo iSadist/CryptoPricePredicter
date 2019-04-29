@@ -1,0 +1,9 @@
+language: node_js
+node_js:
+  - "stable"
+
+script: cd ./cryptopredicter && npm run test
+
+branches:
+  only:
+  - master
