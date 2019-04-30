@@ -3,7 +3,7 @@ node_js:
   - "stable"
 
 install: cd ./cryptopricepredicter/ && npm install
-script: cd ./cryptopricepredicter/ && npm run test
+script: npm test
 
 branches:
   only:
