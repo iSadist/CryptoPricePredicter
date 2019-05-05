@@ -10,6 +10,7 @@ class PriceAxis extends Component {
     this.mouseup = this.mouseup.bind(this)
     this.mousedown = this.mousedown.bind(this)
     this.mousemove = this.mousemove.bind(this)
+    this.mouseleave = this.mouseleave.bind(this)
     this.adjustMaxPrice = this.adjustMaxPrice.bind(this)
 
     this.state = {
@@ -25,6 +26,10 @@ class PriceAxis extends Component {
     this.previousPageY = undefined;
   }
 
+  mouseleave() {
+    this.previousPageY = undefined;
+  }
+
   mousemove(e) {
     if (this.previousPageY) {
       this.adjustMaxPrice(e);
@@ -32,8 +37,11 @@ class PriceAxis extends Component {
   }
 
   adjustMaxPrice(e) {
+    const { currentMaxChartPrice } = this.props
     this.pageY = e.pageY;
-    var newMaxPrice = this.props.currentMaxChartPrice - (this.pageY - this.previousPageY) * 100;
+    const differenceY = this.pageY - this.previousPageY
+    const newMaxPrice = currentMaxChartPrice - (differenceY * currentMaxChartPrice) / 500;
+
     this.previousPageY = this.pageY;
     this.props.onChange(newMaxPrice);
   }
@@ -43,6 +51,7 @@ class PriceAxis extends Component {
       <div className="Main-Content__side-price"
         onMouseDown={this.mousedown}
         onMouseUp={this.mouseup}
+        onMouseLeave={this.mouseleave}
         onMouseMove={this.mousemove}>
         {
           this.props.priceLines.map(function(value, index) {

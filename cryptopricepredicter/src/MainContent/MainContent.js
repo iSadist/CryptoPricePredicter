@@ -46,6 +46,7 @@ class MainContent extends Component {
     this.priceCanvas.mousemove(this.mousemove.bind(this));
     this.priceCanvas.mousedown(this.mousedown.bind(this));
     this.priceCanvas.mouseup(this.mouseup.bind(this));
+    this.priceCanvas.mouseleave(this.mouseleave.bind(this))
 
     this.updateMovingAverages()
     this.updateChartData();
@@ -221,6 +222,10 @@ class MainContent extends Component {
     this.scrollingInView = false;
   }
 
+  mouseleave() {
+    this.scrollingInView = false;
+  }
+
   mousemove(e) {
     if (this.scrollingInView) {
       const diff = this.lastMouseDownX - e.clientX
@@ -238,10 +243,6 @@ class MainContent extends Component {
 
     this.redrawPrice();
     this.drawCross(x, y);
-  }
-
-  mouseleave(e) {
-    this.redrawPrice();
   }
 
   adjustmaxPrice(newMaxPrice) {
