@@ -78,3 +78,4 @@ NeuralNet/Models/*
 
 # dependencies
 /cryptopricepredicter/node_modules
+/cryptopricepredicter/package-lock.json
