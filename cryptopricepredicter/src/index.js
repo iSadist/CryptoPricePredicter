@@ -9,9 +9,11 @@ import UserSettingsPage from './UserSettings/UserSettingsPage';
 import NotFoundPage from './NotFound/NotFoundPage';
 import registerServiceWorker from './registerServiceWorker';
 import movingAveragesReducer from './Reducers/MovingAveragesReducer';
+import movingAveragesVisibilityReducer from './Reducers/MovingAveragesVisibilityReducer'
 
 const combinedReducers = combineReducers({
   movingAverages: movingAveragesReducer,
+  movingAveragesVisibility: movingAveragesVisibilityReducer
 });
 
 const store = createStore(combinedReducers, {
@@ -22,8 +24,10 @@ const store = createStore(combinedReducers, {
       color: 'green',
       time: 15,
       units: '4hours',
+      visible: true
     },
   ],
+  movingAveragesVisibility: true,
 },
 window.devToolsExtension && window.devToolsExtension()
 );

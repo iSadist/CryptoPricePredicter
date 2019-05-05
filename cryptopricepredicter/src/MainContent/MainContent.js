@@ -112,9 +112,11 @@ class MainContent extends Component {
   }
 
   drawPrice() {
-    _.each(this.visibleMovingAveragePriceData, function(item) {
-      this.drawGraph(item.data, item.color);
-    }.bind(this))
+    if(this.props.movingAveragesVisibility) {
+      _.each(this.visibleMovingAveragePriceData, function(item) {
+        this.drawGraph(item.data, item.color);
+      }.bind(this))
+    }
 
     this.drawGraph(this.visiblePriceData, '#ff0000');
   }
@@ -311,7 +313,8 @@ class MainContent extends Component {
 }
 
 const mapStateToProps = state => ({
-  movingAverages: state.movingAverages
+  movingAverages: state.movingAverages,
+  movingAveragesVisibility: state.movingAveragesVisibility
 });
 
 export default connect(mapStateToProps)(MainContent);

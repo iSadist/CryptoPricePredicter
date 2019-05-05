@@ -10,6 +10,7 @@ class MovingAverageView extends Component {
       movingAverages: this.props.movingAverages,
     };
     this.idCounter = this.state.movingAverages.length;
+    this.onShowMovingAveragesChange = this.onShowMovingAveragesChange.bind(this)
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
@@ -68,13 +69,20 @@ class MovingAverageView extends Component {
     });
   }
 
+  onShowMovingAveragesChange(event) {
+    this.props.onShowMovingAveragesChange(event.target.checked)
+  }
+
   render() {
     return (
       <div className="Settings__moving-average">
-        <input className="Settings__checkbox" type="checkbox" value=""></input>
+        <input className="Settings__checkbox"
+          type="checkbox"
+          value=""
+          onChange={this.onShowMovingAveragesChange}
+          />
         <p className="Settings__name">Moving Average</p>
         <button className="Settings__add-button" onClick={this.clickHandler.bind(this)}>+</button>
-
         {
           this.state.movingAverages.map(ma => {
             return <MovingAverageComponent key={ma.id} settings={ma}
