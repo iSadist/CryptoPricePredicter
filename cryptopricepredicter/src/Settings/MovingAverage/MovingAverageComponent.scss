@@ -1,8 +1,34 @@
-.Settings__moving-average-title {
-  display: inline-block;
-  color: white;
-}
+@import "../../variables.scss";
 
-.Settings__moving-average-length {
-  max-width: 15px;
+.Settings {
+  &__moving-average {
+    &-title {
+      display: inline-block;
+      color: $light-gray;
+      font-size: 12px;
+      margin-right: 5px;
+    }
+
+    &-length {
+      margin: 0px 5px;
+      max-width: 15px;
+      border-radius: 5px;
+    }
+
+    &-colors {
+      border: none;
+      margin-right: 10px;
+    }
+
+    &-delete {
+      border: none;
+      border-radius: 5px;
+      margin-left: 10px;
+    }
+
+    &-components {
+      margin-left: 20px;
+      border-bottom: 1px solid $light-gray;
+    }
+  }
 }

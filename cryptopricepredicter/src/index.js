@@ -23,7 +23,6 @@ const store = createStore(combinedReducers, {
       id: 1,
       color: 'green',
       time: 15,
-      units: '4hours',
       visible: true
     },
   ],

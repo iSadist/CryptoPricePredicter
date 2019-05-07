@@ -43,16 +43,8 @@ class MovingAverageComponent extends Component {
           defaultValue={this.props.settings.time}
           onChange={this.onLengthChanged.bind(this)}>
           </input>
-        <p className="Settings__moving-average-title">Units</p>
-        <select defaultValue={this.props.settings.units} className="Settings__moving-average-units"
-          onChange={this.onUnitsChanged.bind(this)}>
-          <option value="days">Days</option>
-          <option value="4hours">4 Hours</option>
-          <option value="1hours">1 Hour</option>
-          <option value="30minutes">30 Minutes</option>
-          <option value="15minutes">15 Minutes</option>
-        </select>
-        <button onClick={this.remove.bind(this)}>-</button>
+        <button className="Settings__moving-average-delete"
+          onClick={this.remove.bind(this)}>-</button>
       </div>
     );
   }
